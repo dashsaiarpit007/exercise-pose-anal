@@ -33,9 +33,9 @@ def extract(engine, frame):
     landmarks = engine.estimator.estimate(frame, box) if box else None
     if not landmarks:
         return None
-    side = max(("left", "right"), key=lambda s: sum(
-        landmarks[i][2] for i in (11, 13, 15, 23, 25, 27) if s == "left"
-    ) if s == "left" else sum(landmarks[i][2] for i in (12, 14, 16, 24, 26, 28)))
+    left = (11, 13, 15, 23, 25, 27)
+    right = (12, 14, 16, 24, 26, 28)
+    side = "left" if sum(landmarks[i][2] for i in left) >= sum(landmarks[i][2] for i in right) else "right"
     indices = (11, 13, 15, 23, 25, 27) if side == "left" else (12, 14, 16, 24, 26, 28)
     if min(landmarks[i][2] for i in indices) < 0.45:
         return None
